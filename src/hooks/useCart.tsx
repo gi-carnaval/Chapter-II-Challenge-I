@@ -35,9 +35,9 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
   const addProduct = async (productId: number) => {
     try {
       const updatedCart = [...cart];
-      const productExists = updatedCart.find(product => product.id === productId);
+      const productExists = updatedCart.find(product => product.id == productId);
 
-      const stock = await api.get(`/products/${productId}`);
+      const stock = await api.get(`/stock/${productId}`);
 
       const stockAmount = stock.data.amount;
       const currentAmount = productExists ? productExists.amount : 0;
@@ -51,7 +51,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       if(productExists){
         productExists.amount = amount;
       } else {
-        const product = await api.get(`/products/${productId}`);
+        const product = await api.get(`/products/${productId}`); 
 
         const newProduct = {
           ...product.data,
@@ -61,12 +61,11 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       }
 
       setCart(updatedCart);
-      localStorage.setItem('@RocketShoes:cart', JSON.stringify(updateCart));
+      localStorage.setItem('@RocketShoes:cart', JSON.stringify(updatedCart));
     } catch {
       toast.error('Erro na adição do produto');
     }
   };
-  addProduct(1);
   const removeProduct = (productId: number) => {
     try {
       // TODO
